@@ -11,6 +11,10 @@ JSON is cool and all, but humans struggle with understanding it. Let’s admit o
 - The homepage should have reasonable styling and layout. (Nothing too fancy, but it shouldn’t make the user cringe.)
 - A user should be able to find that homepage on the Internet, deployed as a static site using S3.
 
+## Screenshot
+![Taskmaster screenshot](/taskmaster-screenshot.png)
+
+
 ## Deployment
 
 - [S3](http://taskmaster-frontend.s3-website-us-west-2.amazonaws.com)
