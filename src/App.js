@@ -1,6 +1,7 @@
 import React, {useState, useEffect} from 'react';
-import { Container, Row, Col, Card, Accordion, Button, Navbar } from 'react-bootstrap';
+import { Container, Row, Col, Card, Accordion, Button, Navbar, Modal } from 'react-bootstrap';
 
+import NewTaskForm from './NewTaskForm.js';
 import './App.scss';
 
 
@@ -21,13 +22,6 @@ function App() {
     fetch(API)
       .then( data => data.json() )
       .then( fetchedTasks => setTasks(fetchedTasks) );
-  }
-
-  function _deleteTask(id) {
-    fetch()
-     .method()
-     .then()
-     .catch()
   }
 
   useEffect( _getTasks, [] );
@@ -54,6 +48,8 @@ function App() {
         <Row>
           <Col sm={{ span: 6, offset: 3 }}>
             <Accordion defaultActiveKey="0">
+
+              {/* Itereate through eeach Task abject */}
               {tasks.map((task, idx) => {
                 return <Card key={task.id}>
                   <Card.Header>
@@ -63,7 +59,13 @@ function App() {
                   </Card.Header>
                   <Accordion.Collapse eventKey={idx}>
                     <Card.Body>
-                      <History history={task.history} />
+
+                      {/* New Task Form Component */}
+                      {task.image ? null : <span><NewTaskForm taskId={task.id} /> <hr/></span> }
+                      
+                      {/* History Component */}
+                      <History history={task.history} image={task.image} />
+
                     </Card.Body>
                   </Accordion.Collapse>
                 </Card>
@@ -73,22 +75,28 @@ function App() {
           </Col>
         </Row>
       </Container>
-      
     </div>
   );
 }
 
 function History(props) {
   return (
-    <ul>
-      {props.history.map( (record,idx) => {
-        return (
-          <span>
-            <li>{record.action}, {record.date}</li>
-          </span> 
-        )
-      })}
-    </ul>
+    <div>
+      <div className="text-center">
+        {props.image ? <img className="uploaded-img" src={props.image} alt="Uploaded"/> : null }
+      </div>
+      
+      <ul>
+        {props.history.map( (record,idx) => {
+          return (
+            <span key={record.date}>
+              <li>{record.action}, {record.date}</li>
+            </span> 
+          )
+        })}
+      </ul>
+    </div>
+    
   )
 }
 
