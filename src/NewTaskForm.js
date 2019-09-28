@@ -1,44 +1,79 @@
-import React, {useState} from 'react';
+import React from 'react';
 import './App.scss';
 
-let form = new FormData();
+//const API = 'http://taskmaster-dev.us-west-2.elasticbeanstalk.com/api/v1/tasks';
+const API = 'https://eic7g8klvd.execute-api.us-west-2.amazonaws.com/dev/tasks';
 
-function NewTaskForm(props) {
-  console.log(props);
-  console.log("props id ", props.taskId);
+export default class NewTaskForm extends React.Component {
+  constructor(props) {
+    super(props);
 
-  const API = 'http://taskmaster-dev-1.us-west-2.elasticbeanstalk.com/api/v1/tasks';
+    this.state = {
+      title: '',
+      description: '',
+      assignee: ''
+    }
 
-  function _handleChange(event) {
-    let value = event.target.files ? event.target.files[0] : event.target.value;
-    form.set(event.target.name, value);
+    this.handleChange = this.handleChange.bind(this);
+    this.upload = this.upload.bind(this);
+  }
+  
+  handleChange(event) {
+    this.setState({[event.target.name]: event.target.value});
   }
 
-  function _upload(event) {
+  upload(event) {
     event.preventDefault();
 
-    fetch(`${API}/${props.taskId}/images`, {
+    const payload = {
+      title: this.state.title,
+      description: this.state.description,
+      assignee: this.state.assignee
+    }
+
+    fetch(API, {
       method: "POST",
       mode: 'cors',
-      body: form,
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(payload)
     })
     .then(response => response.json())
-    .catch(error => console.error('Error:', error))
-    .then(response => console.log('Success:', response));
+    .then(response => {
+      console.log('Success:', response);
+
+      this.setState({
+        title: '',
+        description: '',
+        assignee: ''
+      });
+      
+    })
+    .then(() => {
+      this.props.reload();
+    })
+    .catch(error => console.error('Error:', error));
   }
 
-  return (
-    <div className="form">
-      <form className="form-inline" onSubmit={_upload} method="post" encType="multipart/form-data">
-        <div className="form-group mb-2">
-          <label htmlFor="staticFile2">Add Image:</label>
-          <input type="file" name="file" onChange={_handleChange} className="form-control-file" id="staticFile2" />
-        </div>
-        <button type="submit" className="btn btn-primary mb-2">Submit</button>
-      </form>
-    </div>
-  );
+  render() {
+    return (
+      <div className="form">
+        <form onSubmit={this.upload}>
+          <div className="form-group">
+            <input type="text" name="title" value={this.state.title} className="form-control" onChange={this.handleChange} placeholder="Title" />
+          </div>
+          <div className="form-group">
+            <input type="text" name="description" value={this.state.description} className="form-control" onChange={this.handleChange} placeholder="Description" />
+          </div>
+          <div className="form-group">
+            <input type="text" name="assignee" value={this.state.assignee} className="form-control" onChange={this.handleChange} placeholder="Assignee" aria-describedby="assigneeHelp"/>
+            <small id="assigneeHelp" className="form-text text-muted">* Optional</small>
+          </div>
+          <button type="submit" className="btn btn-primary mb-2">Submit</button>
+        </form>
+      </div>
+    );
+  }
 }
-
-export default NewTaskForm;
 

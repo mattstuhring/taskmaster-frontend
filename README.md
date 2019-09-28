@@ -1,26 +1,33 @@
-# Lab: A Static Frontend for TaskMaster
+# Taskmaster Frontend
 
-## Overview
+## An SNS Topic called "TaskComplete"
+- A Lambda function (called taskmasterSubscribe) that can add an SMS subscriber to that Topic via a parameter (on the inbound event object)
+- A Lambda function (called taskmasterPublish) that sends a message to the TaskComplete topic
+- Messages sent from this Lambda function are received via text
+- A Lambda function that runs on every write operation in your Dynamo DB Table
 
-JSON is cool and all, but humans struggle with understanding it. Let’s admit our human failings by creating a web frontend with React to view this data in a more user-friendly way. 🤖
+## Add Notifications to TaskMaster Cloud
+- Create an API Gateway endpoint that accepts a POST containing a Phone Number in the JSON sent into it's body
+  - This route should run the taskmasterSubscribe lambda function, allowing anyone to subscribe to the TaskComplete SNS Topic
+- Refactor the Lambda function that handles the "write" operations on the Dynamo Database
+  - When it fires, if the operation has marked the task as "Completed" ...
+    - Instead of just logging that activity ...
+    - It should send a message to the TaskComplete topic with text to indicate that the task has been completed.
+- Update your React application with a form that allows the user to enter their phone number so that they can be notified when tasks are completed
+  - This should POST to your new API route and subscribe the user
 
-## Feature Tasks
-
-- A user should be able to visit the homepage of your React app and see the list of all tasks available in the database.
-- React should be well-factored into at least 2 components.
-- The homepage should have reasonable styling and layout. (Nothing too fancy, but it shouldn’t make the user cringe.)
-- A user should be able to find that homepage on the Internet, deployed as a static site using S3.
-
-## Screenshot
-![Taskmaster screenshot](/taskmaster-screenshot.png)
-
-
-## Deployment
+## Feature Requirements / User Validation
+React Application where ...
+- Users can create tasks
+- Users can upload images
+- Users can re-assign tasks to other users
+- Users can enter their phone number to subscribe to completed notifications
+- Users can mark tasks as completed
+- When tasks are marked as complete
+- Dynamo triggers a lambda function
+- That lambda function sends a message to SNS
+- SNS Broadcasts that message to all subscribers, sending a text message
 
 - [S3](http://taskmaster-frontend.s3-website-us-west-2.amazonaws.com)
-- [Backend](http://taskmaster-dev-1.us-west-2.elasticbeanstalk.com/api/v1/tasks)
-
-## Resources
-
-- Melfi Perez
-- Nic Paro
+- [Backend](http://taskmaster-dev.us-west-2.elasticbeanstalk.com/api/v1/tasks)
+- [API Gateway](https://eic7g8klvd.execute-api.us-west-2.amazonaws.com/dev/tasks)
