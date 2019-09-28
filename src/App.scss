@@ -1,9 +1,5 @@
-.App {
-  text-align: center;
-}
-
 nav {
-  margin-bottom: 100px;
+  margin-bottom: 50px;
 }
 
 hr {
@@ -16,4 +12,20 @@ hr {
 
 .uploaded-img {
   width: 250px;
+}
+
+.task-status-title {
+  margin-right: 10px;
+}
+
+.image-input .form-control {
+  border: none;
+}
+
+.subscribe-form {
+  margin-bottom: 50px;
+}
+
+.subscribe-form p {
+  font-size: 12px;
 }
