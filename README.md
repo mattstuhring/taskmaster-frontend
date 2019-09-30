@@ -28,6 +28,10 @@ React Application where ...
 - That lambda function sends a message to SNS
 - SNS Broadcasts that message to all subscribers, sending a text message
 
-- [S3](http://taskmaster-frontend.s3-website-us-west-2.amazonaws.com)
-- [Backend](http://taskmaster-dev.us-west-2.elasticbeanstalk.com/api/v1/tasks)
+## Deployment
+- [S3 Frontend](http://taskmaster-frontend.s3-website-us-west-2.amazonaws.com)
+- [Elastic Beanstalk Backend](http://taskmaster-dev.us-west-2.elasticbeanstalk.com/api/v1/tasks)
 - [API Gateway](https://eic7g8klvd.execute-api.us-west-2.amazonaws.com/dev/tasks)
+
+## Contributions
+- Nic Paro
